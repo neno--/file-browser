@@ -1,5 +1,6 @@
 package com.github.nenomm.filebrowser;
 
+import com.github.nenomm.filebrowser.layout.BrowserLayout;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -11,22 +12,27 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SpringUI
 public class FileBrowserUI extends UI {
 
+	private Logger logger = LoggerFactory.getLogger(FileBrowserUI.class);
 	private VerticalLayout root;
+	private BrowserLayout browserLayout;
 
 	@Override
 	protected void init(VaadinRequest request) {
 		setupLayout();
 		addHeader();
+		initBody();
 	}
 
 	private void setupLayout() {
 		root = new VerticalLayout();
-
-		root.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+		root.setDefaultComponentAlignment(Alignment.TOP_CENTER);
+		root.setHeight("100%");
 
 		setContent(root);
 	}
@@ -40,16 +46,26 @@ public class FileBrowserUI extends UI {
 		searchLayout.addComponent(title);
 
 		TextField tf1 = new TextField();
-		tf1.setWidth("100%");
-		searchLayout.addComponent(tf1);
-		searchLayout.setExpandRatio(tf1, 1.0f);
+		searchLayout.addComponentsAndExpand(tf1);
 
 		Button bttn1 = new Button();
 		bttn1.addStyleName(ValoTheme.BUTTON_PRIMARY);
-		bttn1.setIcon(VaadinIcons.SEARCH);
+		bttn1.setIcon(VaadinIcons.ANGLE_RIGHT);
+		bttn1.addClickListener(click -> {
+			browserLayout.setVisible(true);
+			browserLayout.populate();
+		});
+
 		searchLayout.addComponent(bttn1);
 
 		root.addComponent(searchLayout);
+	}
+
+	private void initBody() {
+		browserLayout = new BrowserLayout();
+		browserLayout.setVisible(false);
+
+		root.addComponentsAndExpand(browserLayout);
 	}
 
 }
