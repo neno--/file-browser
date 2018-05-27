@@ -14,12 +14,15 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI
 public class FileBrowserUI extends UI {
 
 	private Logger logger = LoggerFactory.getLogger(FileBrowserUI.class);
 	private VerticalLayout root;
+
+	@Autowired
 	private BrowserLayout browserLayout;
 
 	@Override
@@ -52,8 +55,8 @@ public class FileBrowserUI extends UI {
 		bttn1.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		bttn1.setIcon(VaadinIcons.ANGLE_RIGHT);
 		bttn1.addClickListener(click -> {
-			browserLayout.setVisible(true);
-			browserLayout.populate();
+			browserLayout.setVisible(false);
+			browserLayout.browseFiles(tf1.getValue());
 		});
 
 		searchLayout.addComponent(bttn1);
@@ -62,9 +65,6 @@ public class FileBrowserUI extends UI {
 	}
 
 	private void initBody() {
-		browserLayout = new BrowserLayout();
-		browserLayout.setVisible(false);
-
 		root.addComponentsAndExpand(browserLayout);
 	}
 

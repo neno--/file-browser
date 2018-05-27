@@ -32,7 +32,7 @@ public class DefaultFileService implements FileService {
 		File file = new File(path);
 		List<FileInfo> files = new ArrayList<>();
 
-		Arrays.stream(file.listFiles()).forEach(f -> files.add(new FileInfo()));
+		Arrays.stream(file.listFiles()).forEach(f -> files.add(new FileInfo(f)));
 
 		return files.stream().filter(f -> f.getPathQueryResult() != PathQueryResult.OTHER).collect(Collectors.toList());
 	}
