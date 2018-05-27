@@ -17,10 +17,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI
-public class FileBrowserUI extends UI {
+public class FileBrowserUI extends UI implements RefreshPathCallback {
 
 	private Logger logger = LoggerFactory.getLogger(FileBrowserUI.class);
 	private VerticalLayout root;
+	private TextField searchField;
 
 	@Autowired
 	private BrowserLayout browserLayout;
@@ -50,6 +51,7 @@ public class FileBrowserUI extends UI {
 
 		TextField tf1 = new TextField();
 		searchLayout.addComponentsAndExpand(tf1);
+		this.searchField = tf1;
 
 		Button bttn1 = new Button();
 		bttn1.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -66,6 +68,11 @@ public class FileBrowserUI extends UI {
 
 	private void initBody() {
 		root.addComponentsAndExpand(browserLayout);
+		browserLayout.registerCallback(this);
 	}
 
+	@Override
+	public void refreshPath(String path) {
+		this.searchField.setValue(path);
+	}
 }

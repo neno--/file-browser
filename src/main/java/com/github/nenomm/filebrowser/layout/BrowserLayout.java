@@ -1,16 +1,18 @@
 package com.github.nenomm.filebrowser.layout;
 
+import com.github.nenomm.filebrowser.RefreshPathCallback;
 import com.github.nenomm.filebrowser.file.FileInfo;
 import com.github.nenomm.filebrowser.file.FileService;
 import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.VerticalLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -27,11 +29,29 @@ public class BrowserLayout extends Panel {
 	@Autowired
 	private FileService fileService;
 
-	VerticalLayout layout = new VerticalLayout();
+	private Grid<FileInfo> grid;
 
-	public BrowserLayout() {
+	private RefreshPathCallback callback;
+
+	@PostConstruct
+	public void initGrid() {
 		setVisible(false);
-		setContent(layout);
+
+		grid = new Grid<>();
+
+		grid.setSizeFull();
+
+		grid.addColumn(FileInfo::getName).setCaption("Name");
+
+		grid.setSelectionMode(Grid.SelectionMode.NONE);
+
+		grid.addItemClickListener(event -> {
+			FileInfo selected = event.getItem();
+			Notification.show(selected.getName());
+			callback.refreshPath(selected.getName());
+		});
+
+		setContent(grid);
 	}
 
 	private void showLayout() {
@@ -63,7 +83,10 @@ public class BrowserLayout extends Panel {
 	}
 
 	private void addItems(List<FileInfo> list) {
-		list.forEach(item -> layout.addComponent(new ItemLayout(item)));
+		grid.setItems(list);
+	}
 
+	public void registerCallback(RefreshPathCallback callback) {
+		this.callback = callback;
 	}
 }
