@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -55,7 +56,6 @@ public class BrowserLayout extends Panel {
 
 		grid.addItemClickListener(event -> {
 			FileInfo selected = event.getItem();
-			Notification.show(selected.getName());
 			callback.refreshPath(selected.getFullPath());
 			browseFiles(selected.getFullPath());
 		});
@@ -77,7 +77,7 @@ public class BrowserLayout extends Panel {
 				break;
 			}
 			case FILE: {
-				Notification.show("This is file.", Notification.Type.HUMANIZED_MESSAGE);
+				FilePreviewWindow.create(new File(path));
 				break;
 			}
 			case NOT_FOUND: {

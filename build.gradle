@@ -30,8 +30,11 @@ ext {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
+
 	compile('com.vaadin:vaadin-spring-boot-starter')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+	compile group: 'com.vaadin', name: 'vaadin-push', version: vaadinVersion
+
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
 }
 
 dependencyManagement {

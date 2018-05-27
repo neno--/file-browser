@@ -1,6 +1,8 @@
 package com.github.nenomm.filebrowser;
 
 import com.github.nenomm.filebrowser.layout.BrowserLayout;
+import com.vaadin.annotations.Push;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
@@ -16,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@Push
 @SpringUI
 public class FileBrowserUI extends UI implements RefreshPathCallback {
 
@@ -60,6 +63,7 @@ public class FileBrowserUI extends UI implements RefreshPathCallback {
 			browserLayout.setVisible(false);
 			browserLayout.browseFiles(tf1.getValue());
 		});
+		bttn1.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
 		searchLayout.addComponent(bttn1);
 
