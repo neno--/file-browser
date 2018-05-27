@@ -44,7 +44,7 @@ public class BrowserLayout extends Panel {
 
 		grid.setSizeFull();
 
-		grid.addColumn(FileInfo::getName).setCaption("Name");
+		grid.addColumn(FileInfo::getName).setCaption("Name").setExpandRatio(1);
 
 		grid.addColumn(FileInfo::getSize).setCaption("Size");
 
@@ -81,18 +81,22 @@ public class BrowserLayout extends Panel {
 				break;
 			}
 			case NOT_FOUND: {
-				Notification.show("Path not found.", Notification.Type.WARNING_MESSAGE);
+				displayWarning("Path not found.");
 				break;
 			}
 			case CANNOT_READ: {
-				Notification.show("Cannot read path content.", Notification.Type.WARNING_MESSAGE);
+				displayWarning("Cannot read path content.");
 				break;
 			}
 			case OTHER: {
-				Notification.show("Cannot display path content.", Notification.Type.WARNING_MESSAGE);
-				break;
+				displayWarning("Cannot display path content.");
 			}
 		}
+	}
+
+	private void displayWarning(String caption) {
+		setVisible(false);
+		Notification.show(caption, Notification.Type.WARNING_MESSAGE);
 	}
 
 	private void addItems(List<FileInfo> list) {

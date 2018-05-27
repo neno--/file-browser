@@ -60,7 +60,6 @@ public class FileBrowserUI extends UI implements RefreshPathCallback {
 		bttn1.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		bttn1.setIcon(VaadinIcons.ANGLE_RIGHT);
 		bttn1.addClickListener(click -> {
-			browserLayout.setVisible(false);
 			browserLayout.browseFiles(tf1.getValue());
 		});
 		bttn1.setClickShortcut(ShortcutAction.KeyCode.ENTER);

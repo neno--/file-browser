@@ -15,7 +15,7 @@ public class FilePreviewWindow extends Window {
 	private TextArea textArea;
 
 	public FilePreviewWindow() {
-		super("File Preview"); // Set window caption
+		super("Loading Preview...");
 		center();
 		setWidth("50%");
 		setHeight("50%");
@@ -29,6 +29,7 @@ public class FilePreviewWindow extends Window {
 	}
 
 	private void update(File file) throws IOException {
+		setCaption(file.getName());
 		textArea.setValue(FileUtils.readFileToString(file, Charset.defaultCharset()));
 		UI.getCurrent().push();
 	}
