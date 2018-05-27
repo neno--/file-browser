@@ -40,12 +40,12 @@ public class DefaultFileService implements FileService {
 		List<FileInfo> files = new ArrayList<>();
 
 		if (file.getParentFile() != null) {
-			files.add(FileInfo.getGoUp(file));
+			files.add(FileInfo.createGoUp(file));
 		}
 
 		Arrays.stream(file.listFiles()).forEach(f -> files.add(new FileInfo(f)));
 
-		return files.stream().filter(f -> f.getPathQueryResult() != PathQueryResult.OTHER).collect(Collectors.toList());
+		return files.stream().filter(f -> f.getType() != FileInfoType.OTHER).collect(Collectors.toList());
 	}
 
 	@Override

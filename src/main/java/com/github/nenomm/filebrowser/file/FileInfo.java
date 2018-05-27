@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class FileInfo {
 
-	private PathQueryResult pathQueryResult;
+	private FileInfoType type;
 	private String name;
 	private long size;
 	private Date modified;    // Instant is better, but there is no renderer in Vaadin 8
@@ -13,7 +13,7 @@ public class FileInfo {
 	private String fullPath;
 
 	public FileInfo(File f) {
-		this.pathQueryResult = PathQueryResult.forFile(f);
+		this.type = FileInfoType.forFile(f);
 		this.name = f.getName();
 		this.size = f.length();
 		this.modified = new Date(f.lastModified());
@@ -21,12 +21,12 @@ public class FileInfo {
 	}
 
 	private FileInfo() {
-		this.pathQueryResult = PathQueryResult.GO_UP;
+		this.type = FileInfoType.GO_UP;
 		this.name = "..";
 	}
 
-	public PathQueryResult getPathQueryResult() {
-		return pathQueryResult;
+	public FileInfoType getType() {
+		return type;
 	}
 
 	public String getName() {
@@ -49,8 +49,9 @@ public class FileInfo {
 		this.fullPath = fullPath;
 	}
 
-	public static FileInfo getGoUp(File f) {
+	public static FileInfo createGoUp(File f) {
 		FileInfo goUp = new FileInfo();
+
 		goUp.setFullPath(f.getParentFile().getPath());
 
 		return goUp;
