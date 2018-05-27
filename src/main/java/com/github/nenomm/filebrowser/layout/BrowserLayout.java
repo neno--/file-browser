@@ -8,13 +8,12 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.renderers.DateRenderer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,7 +26,6 @@ import java.util.Locale;
 @Component
 public class BrowserLayout extends Panel {
 
-	private Logger logger = LoggerFactory.getLogger(BrowserLayout.class);
 
 	@Autowired
 	private FileService fileService;
@@ -70,14 +68,21 @@ public class BrowserLayout extends Panel {
 	}
 
 	public void browseFiles(String path) {
-		switch (fileService.queryPath(path)) {
+
+		File file = new File(path);
+
+		switch (fileService.queryPath(file)) {
 			case DIR: {
 				showLayout();
-				addItems(fileService.getFiles(path));
+				addItems(fileService.getFiles(file));
 				break;
 			}
 			case FILE: {
-				FilePreviewWindow.create(new File(path));
+				try {
+					FilePreviewWindow.create(file.getName(), fileService.getTextContent(file));
+				} catch (IOException e) {
+					Notification.show("Error while previewing the file.", Notification.Type.ERROR_MESSAGE);
+				}
 				break;
 			}
 			case NOT_FOUND: {

@@ -1,14 +1,8 @@
 package com.github.nenomm.filebrowser.layout;
 
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Window;
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 public class FilePreviewWindow extends Window {
 
@@ -28,21 +22,18 @@ public class FilePreviewWindow extends Window {
 		setContent(this.textArea);
 	}
 
-	private void update(File file) throws IOException {
-		setCaption(file.getName());
-		textArea.setValue(FileUtils.readFileToString(file, Charset.defaultCharset()));
-		UI.getCurrent().push();
+	private void setValue(String fileContent) {
+		this.textArea.setValue(fileContent);
 	}
 
-	public static void create(File file) {
+	public static void create(String fileName, String fileContent) {
 		FilePreviewWindow window = new FilePreviewWindow();
+
 		UI.getCurrent().addWindow(window);
 
-		try {
-			window.update(file);
-		} catch (IOException e) {
-			window.close();
-			Notification.show("Error while previewing the file.", Notification.Type.ERROR_MESSAGE);
-		}
+		window.setCaption(fileName);
+		window.setValue(fileContent);
+
+		UI.getCurrent().push();
 	}
 }

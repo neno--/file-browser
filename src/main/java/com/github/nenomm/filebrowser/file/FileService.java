@@ -1,12 +1,14 @@
 package com.github.nenomm.filebrowser.file;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public interface FileService {
 
-	PathQueryResult queryPath(String path);
+	PathQueryResult queryPath(File file);
 
-	List<FileInfo> getFiles(String path);
+	List<FileInfo> getFiles(File file);
 
-	String getTextContent(String path);
+	String getTextContent(File file) throws IOException;
 }
