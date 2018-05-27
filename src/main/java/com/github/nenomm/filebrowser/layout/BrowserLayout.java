@@ -7,6 +7,7 @@ import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.renderers.DateRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This should be component, to support Spring autowiring.
@@ -43,12 +45,19 @@ public class BrowserLayout extends Panel {
 
 		grid.addColumn(FileInfo::getName).setCaption("Name");
 
-		grid.setSelectionMode(Grid.SelectionMode.NONE);
+		grid.addColumn(FileInfo::getSize).setCaption("Size");
+
+		grid.addColumn(FileInfo::getModified,
+				new DateRenderer("%1$tY/%1$tm/%1$td %1$tH:%1$tm:%1$tS",
+						Locale.ENGLISH)).setCaption("Modified");
+
+		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 		grid.addItemClickListener(event -> {
 			FileInfo selected = event.getItem();
 			Notification.show(selected.getName());
-			callback.refreshPath(selected.getName());
+			callback.refreshPath(selected.getFullPath());
+			browseFiles(selected.getFullPath());
 		});
 
 		setContent(grid);
@@ -73,6 +82,10 @@ public class BrowserLayout extends Panel {
 			}
 			case NOT_FOUND: {
 				Notification.show("Path not found.", Notification.Type.WARNING_MESSAGE);
+				break;
+			}
+			case CANNOT_READ: {
+				Notification.show("Cannot read path content.", Notification.Type.WARNING_MESSAGE);
 				break;
 			}
 			case OTHER: {

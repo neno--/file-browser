@@ -18,6 +18,8 @@ public class DefaultFileService implements FileService {
 
 		if (!file.exists()) {
 			return PathQueryResult.NOT_FOUND;
+		} else if (!file.canRead()) {
+			return PathQueryResult.CANNOT_READ;
 		} else if (file.isDirectory()) {
 			return PathQueryResult.DIR;
 		} else if (file.isFile()) {
@@ -31,6 +33,10 @@ public class DefaultFileService implements FileService {
 	public List<FileInfo> getFiles(String path) {
 		File file = new File(path);
 		List<FileInfo> files = new ArrayList<>();
+
+		if (file.getParentFile() != null) {
+			files.add(FileInfo.getGoUp(file));
+		}
 
 		Arrays.stream(file.listFiles()).forEach(f -> files.add(new FileInfo(f)));
 

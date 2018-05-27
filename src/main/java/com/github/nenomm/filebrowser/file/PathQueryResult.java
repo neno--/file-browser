@@ -6,7 +6,9 @@ public enum PathQueryResult {
 	FILE,
 	DIR,
 	NOT_FOUND,
-	OTHER;
+	CANNOT_READ,
+	OTHER,
+	GO_UP;
 
 	public static PathQueryResult forFile(File file) {
 		if (file.isDirectory()) {
