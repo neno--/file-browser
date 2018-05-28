@@ -1,6 +1,7 @@
 package com.github.nenomm.filebrowser.layout.grid;
 
 import com.github.nenomm.filebrowser.file.FileInfoType;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.renderers.HtmlRenderer;
 import elemental.json.JsonValue;
@@ -14,20 +15,20 @@ public class FileInfoTypeRenderer extends HtmlRenderer {
 
 		switch (type) {
 			case GO_UP: {
-				result = FontAwesome.ARROW_UP.getHtml();
+				result = VaadinIcons.ARROW_UP.getHtml();
 				break;
 			}
 			case DIR: {
-				result = FontAwesome.FOLDER.getHtml();
+				result = VaadinIcons.FOLDER.getHtml();
 				break;
 
 			}
 			case FILE: {
-				result = FontAwesome.FILE.getHtml();
+				result = VaadinIcons.FILE.getHtml();
 				break;
 			}
 			default: {
-				result = FontAwesome.QUESTION.getHtml();
+				result = VaadinIcons.QUESTION.getHtml();
 				break;
 			}
 		}

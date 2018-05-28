@@ -67,6 +67,7 @@ public class BrowserLayout extends Panel {
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
 		grid.addItemClickListener(event -> {
+			grid.deselectAll(); // this is not working, cell is still selected
 			FileInfo selected = event.getItem();
 			callback.refreshPath(selected.getFullPath());
 			browseFiles(selected.getFullPath());
