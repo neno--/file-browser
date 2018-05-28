@@ -49,6 +49,10 @@ public class FileInfo {
 		this.fullPath = fullPath;
 	}
 
+	public String getTypeAsString() {
+		return type.name();
+	}
+
 	public static FileInfo createGoUp(File f) {
 		FileInfo goUp = new FileInfo();
 

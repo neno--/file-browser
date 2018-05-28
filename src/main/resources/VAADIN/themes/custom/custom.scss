@@ -1,0 +1,7 @@
+@import "../valo/valo.scss";
+
+@mixin custom {
+  @include valo;
+
+  .v-grid-header th.text-align-right { text-align: right; }
+}

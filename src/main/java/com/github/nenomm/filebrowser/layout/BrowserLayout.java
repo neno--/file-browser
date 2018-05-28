@@ -3,10 +3,16 @@ package com.github.nenomm.filebrowser.layout;
 import com.github.nenomm.filebrowser.RefreshPathCallback;
 import com.github.nenomm.filebrowser.file.FileInfo;
 import com.github.nenomm.filebrowser.file.FileService;
+import com.github.nenomm.filebrowser.layout.grid.FileDateModifiedComparator;
+import com.github.nenomm.filebrowser.layout.grid.FileInfoTypeRenderer;
+import com.github.nenomm.filebrowser.layout.grid.FileNameComparator;
+import com.github.nenomm.filebrowser.layout.grid.FileSizeComparator;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.components.grid.HeaderCell;
+import com.vaadin.ui.components.grid.HeaderRow;
 import com.vaadin.ui.renderers.DateRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,13 +48,21 @@ public class BrowserLayout extends Panel {
 
 		grid.setSizeFull();
 
-		grid.addColumn(FileInfo::getName).setCaption("Name").setExpandRatio(1);
-
-		grid.addColumn(FileInfo::getSize).setCaption("Size");
+		grid.addColumn(FileInfo::getTypeAsString).setRenderer(new FileInfoTypeRenderer()).setSortable(false);
+		grid.addColumn(FileInfo::getName).setCaption("Name").setExpandRatio(3).setComparator(new FileNameComparator());
+		grid.addColumn(FileInfo::getSize).setCaption("Size").setExpandRatio(1).setComparator(new FileSizeComparator());
 
 		grid.addColumn(FileInfo::getModified,
 				new DateRenderer("%1$tY/%1$tm/%1$td %1$tH:%1$tm:%1$tS",
-						Locale.ENGLISH)).setCaption("Modified");
+						Locale.ENGLISH)).setCaption("Modified")
+				.setExpandRatio(1)
+				.setComparator(new FileDateModifiedComparator())
+				.setStyleGenerator(item -> "v-align-right")
+				.setId("Modified");
+
+		HeaderRow headerRow = grid.getDefaultHeaderRow();
+		HeaderCell testCycleHeaderCell = headerRow.getCell("Modified");
+		testCycleHeaderCell.setStyleName("text-align-right");
 
 		grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
